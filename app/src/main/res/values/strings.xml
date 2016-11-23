@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SimpleMusicPlayer</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="None" />
+    <string name="action_Shuffle">Shuffle</string>
+    <string name="intentExtra">SongPos</string>
+    <string name="whatBCRLooksFor">Position-Update</string>
+</resources>

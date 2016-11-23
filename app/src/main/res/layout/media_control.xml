@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:gravity="center_horizontal"
+    android:layout_alignParentBottom="true"
+    android:layout_above="@id/activity_main"
+    android:weightSum="1"
+    >
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="start"
+    android:layout_weight=".7"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/con_title"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="16sp"
+        android:text="Title"
+        android:gravity="start|center_horizontal|center_vertical"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        />
+    <TextView
+        android:id="@+id/con_Artist"
+        android:layout_width="wrap_content"
+        android:text="Artist"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:ellipsize="end"
+        android:gravity="start|center_horizontal|center_vertical"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="14sp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        />
+
+</LinearLayout>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/preTrack"
+        android:background="@android:color/transparent"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:src="@drawable/ic_skip_previous"
+        android:layout_weight=".1"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        />
+
+  <ToggleButton
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      android:id="@+id/playPause"
+      android:background="@drawable/play_pause"
+      android:layout_gravity="center_horizontal|center_vertical"
+      android:layout_weight=".1"
+      android:textOn="@string/None"
+      android:text="@string/None"
+      android:textOff="@string/None"
+      android:layout_marginRight="5dp"
+      android:layout_marginLeft="5dp"
+      android:layout_marginStart="5dp"
+      android:layout_marginEnd="5dp"
+
+      />
+<ImageButton
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:id="@+id/nextTrack"
+    android:background="@android:color/transparent"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:src="@drawable/ic_skip_next"
+    android:layout_weight=".1"
+    android:layout_marginRight="10dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginEnd="10dp"
+    />
+
+</LinearLayout>
