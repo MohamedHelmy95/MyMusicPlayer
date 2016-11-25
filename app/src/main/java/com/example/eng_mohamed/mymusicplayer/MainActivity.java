@@ -22,10 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -34,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements ImageButton.OnCli
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private RecyclerAdapter mAdapter;
-    public  List<SongModel> mSongList=new ArrayList<>();
+    public  ArrayList<SongModel> mSongList;
     public  boolean  playbackPaused,runOnce;
-    private MusicService musicService;
+    private static MusicService musicService;
     private Intent playIntent;
     ToggleButton mPlayPause;
     ImageButton mNext,mPrevious;
@@ -46,6 +48,13 @@ public class MainActivity extends AppCompatActivity implements ImageButton.OnCli
     int lastPlayed;
     int mSongPos;
     int lastPlayedSeekPos;
+    SongModel[] ds= {};
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("songs",mSongList);
+        super.onSaveInstanceState(outState);
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -69,10 +78,12 @@ public class MainActivity extends AppCompatActivity implements ImageButton.OnCli
 
     @Override
     protected void onResume() {
+        super.onResume();
+        Log.e("main Act","Resume");
         runOnce = getSharedPreferences("lastPlayed", Context.MODE_PRIVATE).getBoolean("firstRun",true);
         LocalBroadcastManager.getInstance(this).registerReceiver(handleMediaPlayerSwitch,
                 new IntentFilter(getString(R.string.whatBCRLooksFor)));
-                  super.onResume();
+
     }
     @Override
     protected void onDestroy() {
@@ -175,6 +186,10 @@ public class MainActivity extends AppCompatActivity implements ImageButton.OnCli
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        if(savedInstanceState==null||!savedInstanceState.containsKey("songs")) {
+            mSongList = new ArrayList<SongModel>(Arrays.asList(ds));
+        }
+        else{mSongList=savedInstanceState.getParcelableArrayList("details");}
         mAdapter = new RecyclerAdapter(mSongList,this);
         mRecyclerView.setAdapter(mAdapter);
         mPlayPause=(ToggleButton) findViewById(R.id.playPause);
@@ -185,9 +200,20 @@ public class MainActivity extends AppCompatActivity implements ImageButton.OnCli
         mPrevious.setOnClickListener(this);
         mTitle=(TextView)findViewById(R.id.con_title);
         mArtist=(TextView)findViewById(R.id.con_Artist);
-
+        LinearLayout song=(LinearLayout)findViewById(R.id.controls);
+        song.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(),SongActivity.class);
+                i.putExtra("Song",mSongList.get(mSongPos));
+                i.putExtra("seekPos",musicService.getSongSeekPos());
+                startActivity(i);
+            }
+        });
     }
-
+    public static MusicService getService(){
+        return musicService;
+    }
     public List<SongModel> sortByTitle(List<SongModel> sorted ){
         Collections.sort(sorted, new Comparator<SongModel>(){
             public int compare(SongModel a, SongModel b){

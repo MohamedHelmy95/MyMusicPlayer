@@ -5,4 +5,7 @@
     <string name="action_Shuffle">Shuffle</string>
     <string name="intentExtra">SongPos</string>
     <string name="whatBCRLooksFor">Position-Update</string>
+    <string name="syncBarService">Sync-Time</string>
+    <string name="syncBarServiceEx">currPosition</string>
+    <string name="title_activity_song">SongActivity</string>
 </resources>

@@ -39,6 +39,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     private boolean shuffle,paused;
     private Random rand;
 
+
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,7 +50,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public boolean onUnbind(Intent intent) {
         player.stop();
-        player.release();
+        player.reset();
         return false;
     }
 
@@ -103,6 +105,14 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         in.putExtra(getString(R.string.intentExtra),songPos);
         LocalBroadcastManager.getInstance(this).sendBroadcast(in);
     }
+//    private void updateCurrentTimePosition() {
+//        Intent in=new Intent(getString(R.string.syncBarService));
+//        in.putExtra(getString(R.string.syncBarServiceEx),getSongSeekPos());
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(in);
+//
+//    }
+
+
 
     public void playTrack(){
         player.reset();
@@ -128,7 +138,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(player.getCurrentPosition()>0){
+        if(player!=null && player.getCurrentPosition()>0){
             mp.reset();
             playNext();
         }
@@ -163,12 +173,27 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     public void onAudioFocusChange(int focusChange) {
         if (focusChange != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             // could not get audio focus.
-            if(player.isPlaying())
+        if(player==null){
+            player=new MediaPlayer();
+            if(player.isPlaying()){
                 pausePlayer();
-            Toast.makeText(getApplicationContext(),"Cannot Play Song Stop any other Media Players",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Cannot Play Song Stop any other Media Players",Toast.LENGTH_LONG).show();
+            }
+            else{
+                if(paused){resumePlayer();}
+
+            }
+
+        }else{
+            if(player.isPlaying()){
+                pausePlayer();
+                Toast.makeText(getApplicationContext(),"Cannot Play Song Stop any other Media Players",Toast.LENGTH_LONG).show();
+            }
+            else{
+                if(paused){resumePlayer();}
+
+            }
         }
-        else{
-            if(paused){resumePlayer();}
 
         }
     }
@@ -220,14 +245,34 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         playTrack();
         player.seekTo(seek);
     }
+    public void seekTo(int seek){
+
+        player.seekTo(seek);
+    }
     public void setShuffle() {
         if(shuffle) shuffle=false;
         else shuffle=true;
+    }
+    public void fastForward(){
+        int seek=player.getCurrentPosition()+5000;
+        Log.e("FastForward",""+seek);
+        if(seek<=player.getDuration())
+            player.seekTo(seek);
+    }
+    public void rewind(){
+        int seek=player.getCurrentPosition()-5000;
+        if(seek>=0)
+            player.seekTo(seek);
     }
 
     public boolean isShuffle() {
         return shuffle;
     }
+    public int getDuration(){
+        return player.getDuration();
+    }
 
-
+    public SongModel getSong() {
+        return songs.get(songPos);
+    }
 }
